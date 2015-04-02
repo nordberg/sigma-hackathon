@@ -38,7 +38,6 @@ func buildKeystream(cipher string, keyword string) string {
         sigmaKey = sigmaKey % len(keyword)
 
         matched, _ := regexp.MatchString("[A-Za-z]", string(val))
-
         if matched {
             buffer.WriteString(string(keyword[sigmaKey]))
         } else {
@@ -59,11 +58,12 @@ func decipher(cipher string, keystream string) string {
         matched, _ := regexp.MatchString("[A-Za-z]", string(val))
         if matched {
             sigma := keystream[key]
-            //shift := strings.Index(string(rune(sigma)), ALPHABET)
+            // Get the index in the alphabet of the keystream character
+            // to know how far we should shift the letter
             shift := bytes.IndexRune([]byte(ALPHABET), rune(sigma))
             c := shiftLetter(val, shift)
-            if c > 90 || c < 65 {
-                fmt.Printf("%c %c ", val, c)
+            if c > 'Z' || c < 'A' {
+                fmt.Printf("%c %c\n", val, c)
             }
             buffer.WriteString(string(c))
         } else {
@@ -79,7 +79,22 @@ func shiftLetter(letter rune, shift int) rune {
     // The shift is added and the modolu operator makes sure we
     // start over at A after Z. At the end, 65 is added to get
     // back to the decimal value of the letter
-    letter = rune(strings.ToUpper(string(letter))[0]) // To uppercase
-    c := (((int(letter) - 65) + shift) % 26) + 65
+    c := rune(strings.ToUpper(string(letter))[0]) // To uppercase
+
+    // Some sort of negative shift...
+    for i := 0; i < shift; i++ {
+        if c < 'A' {
+            c = 'Y'
+        } else {
+            c--
+        }
+    }
+
+    // If c == 'A' on the last iteration, it would subtract by 1 and
+    // thus, become '@'
+    if c == '@' {
+        c = 'A'
+    }
+
     return rune(c)
 }

@@ -83,17 +83,11 @@ func shiftLetter(letter rune, shift int) rune {
 
     // Some sort of negative shift...
     for i := 0; i < shift; i++ {
-        if c < 'A' {
-            c = 'Y'
+        if c == 'A' {
+            c = 'Z'
         } else {
             c--
         }
-    }
-
-    // If c == 'A' on the last iteration, it would subtract by 1 and
-    // thus, become '@'
-    if c == '@' {
-        c = 'A'
     }
 
     return rune(c)

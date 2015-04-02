@@ -23,14 +23,12 @@ func main() {
 
     findShiftValue()
 
-    // The shift of 18 gives "BPM" -> "THE" which
-    // seems reasonable
-
+    // The shift of 18 gives "BPM" -> "THE" which seems reasonable
     shift := 18
 
     for _, val := range CIPHER {
         matched, _ := regexp.MatchString("[A-Z]", string(val))
-        if (matched) {
+        if matched {
             fmt.Printf("%c", shiftLetter(val, shift))
         } else {
             fmt.Printf("%c", val)
